@@ -1,0 +1,53 @@
+#include<iostream>
+
+using namespace std;
+
+struct BinaryTreeNode
+{
+	BinaryTreeNode* leftchild;
+	BinaryTreeNode* rightchild;
+	char data;
+};
+char  ConstructPostOrder(char* PreOrderStart, char* PreOrderEnd, char* InOrderStart, char* InOdrderEnd)
+{
+	char RootValue = PreOrderStart[0];
+	BinaryTreeNode* RootTree = new BinaryTreeNode();
+
+	char* InOrderIncrease = InOrderStart;
+
+	while (InOrderIncrease < InOdrderEnd && *InOrderIncrease != RootValue)
+		InOrderIncrease++;
+	if (InOrderIncrease == InOdrderEnd && *InOrderIncrease != RootValue)
+		throw std::exception("invalid input!!");
+	int leftlength = InOrderIncrease - InOrderStart;
+	char* preleftend = PreOrderStart + leftlength;
+
+	if (leftlength > 0)
+		ConstructPostOrder(PreOrderStart + 1, preleftend, InOrderStart, InOrderIncrease - 1);
+	if (leftlength < PreOrderEnd - PreOrderStart)
+		ConstructPostOrder(preleftend + 1, PreOrderEnd, InOrderIncrease + 1, InOdrderEnd);
+	cout << *PreOrderStart << " ";
+
+	return 0;
+
+
+}
+int BinaryTreeOrder(char* PreOrder, char* InOrder, char length)
+{
+	if (length == 0 || PreOrder ==NULL || InOrder == NULL)
+		throw std::exception("input valid!!");
+	char* PreOrderStart = PreOrder, *PreOrderEnd = PreOrder + length - 1, *InOrderStart = InOrder, *InOdrderEnd = InOrder + length - 1;
+	return ConstructPostOrder(PreOrderStart, PreOrderEnd, InOrderStart, InOdrderEnd);
+}
+
+int main()
+{
+	char pre[] = {'G','D','A','F','E','M','H','Z'};
+	char in[] = {'A','D','E','F','G','H','M','Z'};
+	int length = sizeof(pre) / sizeof(char);
+
+	BinaryTreeOrder(pre,in,length);
+
+	system("pause");
+
+}
